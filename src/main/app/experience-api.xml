@@ -30,6 +30,14 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 
     </http:listener-config>
     
+    <http:request-config name="ehr-system-api" host="${api.ehr.host}" port="${api.ehr.port}" basePath="${api.ehr.basepath}" doc:name="HTTP Request Configuration">
+        <http:raml-api-configuration location="ehr-system-api/healthcare-system-api.raml"/>
+    </http:request-config>
+    
+    <http:request-config name="ehr2crm-process-api" host="${api.ehr2crm.host}" port="${api.ehr2crm.port}" basePath="${api.ehr2crm.basepath}" doc:name="HTTP Request Configuration">
+        <http:raml-api-configuration location="ehr2crm-sync-process-api/healthcare-ehr2crm-sync-process-api.raml"/>
+    </http:request-config>
+    
 <!--     <api-platform-gw:api id="${api.id}" apiName="${api.name}" version="${api.version}" flowRef="api-main" doc:name="API Autodiscovery"></api-platform-gw:api> -->
         
     <apikit:config name="api-config" raml="healthcare-sfdchealth2fhir-ehr-experience-api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
@@ -61,8 +69,20 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     </flow>
 
      <flow name="get:/patient/migrateClinicalData:api-config"  >
+        <http:request config-ref="ehr-system-api" path="/Patient" method="GET" doc:name="Fetch Patients from EHR"/>
+        <dw:transform-message doc:name="Extract patient ids">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload.entry map {
+	"id" : $.resource.id
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <foreach collection="#[payload]" doc:name="For Each">
+            <logger message="Calling post for #[payload.id]" level="INFO" doc:name="Call migrate for a particular patient"/>
+        </foreach>
 
-        <logger message="The POST process has finished." level="INFO" doc:name="Log success"/>
+        <logger message="The POST process has finished. #[payload]" level="INFO" doc:name="Log success"/>
         <dw:transform-message doc:name="Create response JSON">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
