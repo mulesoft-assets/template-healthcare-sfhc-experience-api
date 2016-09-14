@@ -1,4 +1,4 @@
-# Template Healthcare SFDC HealthCloud to FHIR EHR Experience API
+# Template Healthcare SFHC HealthCloud Experience API
 
 + [License Agreement](#licenseagreement)
 + [Use Case](#usecase)
@@ -22,34 +22,25 @@ Please review the terms of the license before downloading and using this templat
 
 As a Salesforce Health Cloud user I want a service to request Clinical data from an EHR system to be updated in my Salesforce instance.
 
-This template should serve as a foundation for implementing an API that connects Salesforce Health Cloud with the FHIR Process APIs that are provided as part of the Healthcare Templates Solution. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). EHR Experience API retrieves data from the microservices defined in FHIR Process APIs in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)) and transforms them to the SFDC HealthCloud structures.
+This template should serve as a foundation for implementing an API that connects Salesforce Health Cloud with the EHR FHIR System API and EHR to CRM Sync Process API that are provided as part of the Healthcare Templates Solution. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). SFHC Experience API triggers clinical data migration from the underlying microservices defined in EHR FHIR System API in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)).
 
-SFDC HealthCloud to FHIR Experience API is part of the Healthcare Templates Solution and it is interconnected with FHIR Process APIs(used for retrieving Clinical data) and EHR System API(used for persisting Clinical data in SFDC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud. For this purpose it is using HTTPS endpoint with basic authentication for external calls, HTTPS calls are used to FHIR Process APIs and HTTP calls to EHR System API. For more information see [API Security Considerations](#apissecurityconsiderations).
+SFHC Experience API is part of the Healthcare Templates Solution and it is interconnected with EHR FHIR System API(used for retrieving EHR data) and EHR to CRM Sync Process API(used for migrating Clinical data in SFHC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud.
 
 # Considerations <a name="considerations"/>
 
 To make this Anypoint Template run, there are certain preconditions that must be considered. **Failling to do so could lead to unexpected behavior of the template.**
 
-## Cloudhub security considerations <a name="cloudhubsecurityconsiderations"/>
-
-+ When VPC is configured in a Cloudhub account, two additional **ports** are available **for internal calls: 8091 and 8092**
-+ ${http.port} and ${https.port} are still reserved for external endpoints and should not be used for setting internal port values
-+ Internal endpoints **can be configured using** proposed placeholders: **${http.internal.port}** and **${https.internal.port}**
-+ There is a URL naming convention for **calls between applications within the same VPC: mule-worker-internal-<appname\>.cloudhub.io**
-+ **Cloudhub will not replace provided SSL certificates for internal calls**, therefore they should be valid for the mentioned URL naming convention
-
 ## APIs security considerations <a name="apissecurityconsiderations"/>
 This Experience API is meant to be deployed to CloudHub and managed using the API Platform Manager.
 
-### Exposing external endpoints with HTTPS and basic authentication
-+ It is triggered by SFDC Health Cloud using HTTPS
-+ It is secured using basic authentication policy on API Platform. For more information see [Applying policies on API Platform](#applyingpolicies).
+### Exposing external endpoints with HTTP
++ It is triggered by SFHC Health Cloud using HTTP
 
-### Exposing internal endpoints with RAML and HTTPS
-+ It is interconnected internally with FHIR Process APIs, which are deployed within a CloudHub VPC.
+### Exposing internal endpoints with RAML and HTTP
++ It is interconnected internally with EHR to CRM Sync Process API and EHR FHIR System API, which are deployed within a CloudHub.
 
 # Run it! <a name="runit"/>
-Simple steps to get Healthcare SFDC HealthCloud to FHIR EHR Experience API running.
+Simple steps to get Healthcare SFHC Experience API running.
 See below.
 
 ## Running on premise <a name="runonopremise"/>
@@ -75,7 +66,6 @@ You can find a detailed description on how to do so in this [Documentation Page]
 ### Running on Studio <a name="runonstudio"/>
 Once you have imported you Anypoint Template into Anypoint Studio you need to follow these steps to run it:
 
-+ Generate keystore and truststore (You can find a detailed description on how to do so in this [Documentation Page](https://docs.mulesoft.com/mule-user-guide/v/3.7/tls-configuration#generating-keystores-and-truststores))
 + Locate the properties file `mule-<env>.properties`, in src/main/app/resources
 + Complete all the properties required as per the examples in the section [Properties to be configured](#propertiestobeconfigured)
 + Once that is done, right click on you Anypoint Template project folder 
@@ -100,8 +90,13 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 ### Application properties
 
 
-
-####API Platform Organization
-
 ####API calls configuration
+
++ api.ehr.host `api_ehr_hostname`
++ api.ehr.basepath `/api`
++ api.ehr.port `8081`
+
++ api.ehr2crm.host `api_ehr2crm_hostname`
++ api.ehr2crm.basepath `/api`
++ api.ehr2crm.port `8082`
 

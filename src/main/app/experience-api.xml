@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tls="http://www.mulesoft.org/schema/mule/tls" 
-	xmlns:api-platform-gw="http://www.mulesoft.org/schema/mule/api-platform-gw" 
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" 
-	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc" 
-	xmlns:json="http://www.mulesoft.org/schema/mule/json" 
-	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" 
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
 	xmlns="http://www.mulesoft.org/schema/mule/core" 
 	xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" 
 	xmlns:http="http://www.mulesoft.org/schema/mule/http" 
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
-http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
-http://www.mulesoft.org/schema/mule/api-platform-gw http://www.mulesoft.org/schema/mule/api-platform-gw/current/mule-api-platform-gw.xsd
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd" >
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd" >
 
 	<context:property-placeholder location="common.properties, mule.${mule.env}.properties"/>
     
@@ -36,36 +27,22 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     
     <http:request-config name="ehr2crm-process-api" host="${api.ehr2crm.host}" port="${api.ehr2crm.port}" basePath="${api.ehr2crm.basepath}" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="ehr2crm-sync-process-api/healthcare-ehr2crm-sync-process-api.raml"/>
-    </http:request-config>
-    
-<!--     <api-platform-gw:api id="${api.id}" apiName="${api.name}" version="${api.version}" flowRef="api-main" doc:name="API Autodiscovery"></api-platform-gw:api> -->
+    </http:request-config>    
         
     <apikit:config name="api-config" raml="healthcare-sfdchealth2fhir-ehr-experience-api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
         <apikit:flow-mapping resource="/patient/migrateClinicalData" action="post" flow-ref="get:/patient/migrateClinicalData:api-config"/>
     </apikit:config>
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8082" doc:name="HTTP Listener Configuration"/>
 
-    
-<!--     <http:request-config name="Observation_API" host="${api.observation.host}" port="${api.observation.port}" doc:name="HTTP Request Configuration" basePath="${api.observation.basepath}" protocol="HTTPS"> -->
-<!--         <tls:context> -->
-<!--             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/> -->
-<!--       </tls:context> -->
-<!--         <http:raml-api-configuration location="healthcare-ehr2fhir-observation-process-api.raml"/> -->
-<!-- 	</http:request-config> -->
-
-<!--     <http:request-config name="MedicationPrescription_API" host="${api.medicationprescription.host}" port="${api.medicationprescription.port}"  doc:name="HTTP Request Configuration" basePath="${api.medicationprescription.basepath}" protocol="HTTPS"> -->
-<!--          <tls:context> -->
-<!--             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/> -->
-<!--       </tls:context> -->
-<!--         <http:raml-api-configuration location="healthcare-ehr2fhir-medication-process-api.raml"/> -->
-<!--     </http:request-config> -->
-
-    
-    
         
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="api-console">
+        <http:listener config-ref="api-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
+        <apikit:console config-ref="api-config" doc:name="APIkit Console"/>
     </flow>
 
      <flow name="get:/patient/migrateClinicalData:api-config"  >
@@ -80,9 +57,14 @@ payload.entry map {
         </dw:transform-message>
         <foreach collection="#[payload]" doc:name="For Each">
             <logger message="Calling post for #[payload.id]" level="INFO" doc:name="Call migrate for a particular patient"/>
+            <http:request config-ref="ehr2crm-process-api" path="/patients/{patientId}/migrateClinicalData" method="POST" doc:name="Migrate Patient clinical data">
+                <http:request-builder>
+                    <http:uri-param paramName="patientId" value="#[payload.id]"/>
+                </http:request-builder>
+            </http:request>
         </foreach>
 
-        <logger message="The POST process has finished. #[payload]" level="INFO" doc:name="Log success"/>
+        <logger message="The migration of clinical data has finished. #[payload]" level="INFO" doc:name="Log success"/>
         <dw:transform-message doc:name="Create response JSON">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
@@ -90,38 +72,6 @@ payload.entry map {
 {"message": "The GET process has finished."}]]></dw:set-payload>
         </dw:transform-message>
     </flow>
-
-    
-<!--     <sub-flow name="Observation"> -->
-<!--         <http:request config-ref="Observation_API" path="/patients/{patientIDType}/{patientID}/observations" method="GET" doc:name="GET Observation"> -->
-<!--             <http:request-builder> -->
-<!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
-<!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
-<!--             </http:request-builder> -->
-<!--         </http:request> -->
-<!--         <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/observations" method="POST" doc:name="POST Observations into SFDC"> -->
-<!--             <http:request-builder> -->
-<!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
-<!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
-<!--             </http:request-builder> -->
-<!--         </http:request> -->
-<!--     </sub-flow> -->
-
-<!--     <sub-flow name="MedicationPrescription"> -->
-<!--         <http:request config-ref="MedicationPrescription_API" path="/patients/{patientIDType}/{patientID}/medicationorders" method="GET" doc:name="GET MedicationPrescription"> -->
-<!--             <http:request-builder> -->
-<!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
-<!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
-<!--             </http:request-builder> -->
-<!--         </http:request> -->
-<!--         <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/medications" method="POST" doc:name="POST Medications into SFDC"> -->
-<!--             <http:request-builder> -->
-<!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
-<!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
-<!--             </http:request-builder> -->
-<!--         </http:request> -->
-<!--     </sub-flow> -->
-
 
     <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
     
