@@ -6,13 +6,22 @@ version: v1
   displayName: migrateClinicalData
   get:
     description: migrate clinical data to Salesforce Health Cloud
-    queryParameters:
-        mock:
-          type: string
-          enum: [on, off]
-          required: false
     responses:
       200:
         body:
           application/json:
-            example: !include experience-api-response.json
+            example: | 
+              {
+                "message": "The migrate process has finished."
+              }
+/patient/{id}/migrateClinicalData:
+  get:
+    description: migrate clinical data to Salesforce Health Cloud
+    responses:
+      200:
+        body:
+          application/json:
+            example: | 
+              {
+                "message": "The migrate process for a patient has finished."
+              }

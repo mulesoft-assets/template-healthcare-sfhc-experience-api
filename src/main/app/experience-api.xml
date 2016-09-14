@@ -71,6 +71,19 @@ payload.entry map {
 {"message": "The GET process has finished."}]]></dw:set-payload>
         </dw:transform-message>
     </flow>
+    <flow name="get:/patient/{id}/migrateClinicalData:api-config">
+        <http:request config-ref="ehr2crm-process-api" path="/patients/{patientId}/migrateClinicalData" method="POST" doc:name="Migrate Patient by Id from EHR">
+            <http:request-builder>
+                <http:uri-param paramName="patientId" value="#[flowVars.id]"/>
+            </http:request-builder>
+        </http:request>
+        <dw:transform-message doc:name="Create response JSON">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{"message": "The migrate process for a patient has finished."}]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
 
     <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
     
