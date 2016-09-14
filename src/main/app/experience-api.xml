@@ -32,7 +32,6 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <apikit:config name="api-config" raml="healthcare-sfdchealth2fhir-ehr-experience-api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
         <apikit:flow-mapping resource="/patient/migrateClinicalData" action="post" flow-ref="get:/patient/migrateClinicalData:api-config"/>
     </apikit:config>
-    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8082" doc:name="HTTP Listener Configuration"/>
 
         
     <flow name="api-main">
