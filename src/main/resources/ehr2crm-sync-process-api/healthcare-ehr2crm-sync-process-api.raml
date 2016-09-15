@@ -1,7 +1,9 @@
 #%RAML 1.0
-title: healthcare-sfdchealth2fhir-ehr-experience-api
-baseUri: http://healthcare-sfdchealth2fhir-ehr-experience-api.cloudhub.io/api
+title: Healthcare EHR to CRM Sync Process API
 version: v1
+baseUri: http://localhost:8081/api/
+
+
 /patients/{patientId}/migrateClinicalData:
   displayName: migrateClinicalData
   post:

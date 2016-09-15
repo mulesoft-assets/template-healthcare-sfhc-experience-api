@@ -29,7 +29,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <http:raml-api-configuration location="ehr2crm-sync-process-api/healthcare-ehr2crm-sync-process-api.raml"/>
     </http:request-config>    
         
-    <apikit:config name="api-config" raml="healthcare-sfdchealth2fhir-ehr-experience-api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
+    <apikit:config name="api-config" raml="api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
         <apikit:flow-mapping resource="/patient/migrateClinicalData" action="post" flow-ref="get:/patient/migrateClinicalData:api-config"/>
     </apikit:config>
 
