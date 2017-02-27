@@ -30,7 +30,8 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     </http:request-config>    
         
     <apikit:config name="api-config" raml="api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
-        <apikit:flow-mapping resource="/patient/migrateClinicalData" action="post" flow-ref="get:/patient/migrateClinicalData:api-config"/>
+        <apikit:flow-mapping resource="/patient/migrateClinicalData" action="get" flow-ref="get:/patient/migrateClinicalData:api-config"/>
+        <apikit:flow-mapping resource="/patient/{id}/migrateClinicalData" action="get" flow-ref="get:/patient/{id}/migrateClinicalData:api-config"/>
     </apikit:config>
 
         
