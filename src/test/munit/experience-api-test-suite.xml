@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+	<context:property-placeholder location="mule.test.properties" />
+    <munit:config name="munit" doc:name="MUnit configuration" mock-connectors="false" mock-inbounds="false"/>
+    <spring:beans>
+        <spring:import resource="classpath:experience-api.xml"/>
+    </spring:beans>
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8081" basePath="/api" doc:name="HTTP Request Configuration">
+        <http:raml-api-configuration location="api.raml"/>
+    </http:request-config>
+    <munit:test name="experience-api-test-suite-get:/patient/migrateClinicalData:api-configTest" description="Test">
+        <mock:when messageProcessor=".*:.*" doc:name="Mock 'Fetch Patients from EHR'">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Fetch Patients from EHR']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[getResource('scaffolder/response/get_200_patient_application_json.json').asString()]" mimeType="application/json"/>
+        </mock:when>
+        <mock:when messageProcessor=".*:.*" doc:name="Mock 'Migrate Patient clinical data'">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Migrate Patient clinical data']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[getResource('scaffolder/response/get_200_patients_{patientId}_migrateClinicalData_application_json.json').asString()]" mimeType="application/json"/>
+        </mock:when>
+        <mock:spy doc:name="Spy 'Extract patient ids'" messageProcessor=".*:.*">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Extract patient ids']"/>
+            </mock:with-attributes>
+            <mock:assertions-before-call>
+                <munit:assert-on-equals expectedValue="#[getResource('scaffolder/response/get_200_patient_application_json.json').asString().replaceAll('\\s+','')]" actualValue="#[payload.replaceAll('\\s+','')]" doc:name="Assert Equals patients from EHR" message="Fetched patients from EHR not as expected!"/>
+            </mock:assertions-before-call>
+            <mock:assertions-after-call>
+                <munit:assert-on-equals expectedValue="#[[{&quot;id&quot;: &quot;13556258&quot;}, {&quot;id&quot;: &quot;2&quot;}]]" actualValue="#[payload]" doc:name="Assert Equals patient IDs from EHR" message="Fetched patient IDs from EHR not as expected!"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <http:request config-ref="HTTP_Request_Configuration" path="/patient/migrateClinicalData" method="GET" doc:name="HTTP"/>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert that - http.status eq 200" />
+    </munit:test>
+    <munit:test name="experience-api-test-suite-get:/patient/{id}/migrateClinicalData:api-configTest" description="Test">
+        <mock:when messageProcessor=".*:.*" doc:name="Mock 'Migrate Patient by Id from EHR'">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Migrate Patient by Id from EHR']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[getResource('scaffolder/response/get_200_patients_{patientId}_migrateClinicalData_application_json.json').asString()]" mimeType="application/json"/>
+        </mock:when>
+        <http:request config-ref="HTTP_Request_Configuration" path="/patient/{id}/migrateClinicalData" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:uri-param paramName="id" value="123"/>
+            </http:request-builder>
+        </http:request>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert that - http.status eq 200"/>
+    </munit:test>
+</mule>

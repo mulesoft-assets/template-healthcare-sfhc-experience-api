@@ -86,9 +86,11 @@ Mule Studio provides you with really easy way to deploy your Template directly t
 When a Mule application is deployed using the Mule API Gateway Runtime, the API Platform allows to dinamically apply different policies that can be used for securizing the application, among many other cases. More information can be found in [Anypoint Platform for APIs](https://docs.mulesoft.com/anypoint-platform-for-apis/applying-runtime-policies)
 
 ## Properties to be configured (With examples) <a name="propertiestobeconfigured"/>
-In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. Detailed list with examples:
+In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. To run the MUnit tests, the configuration file is located in the [mule.test.properties](../src/test/resources/mule.test.properties). Detailed list with examples:
 ### Application properties
 
+####HTTP configuration
++ http.port `8081`
 
 ####API calls configuration
 
