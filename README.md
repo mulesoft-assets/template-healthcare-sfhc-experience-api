@@ -11,7 +11,6 @@
 	* [Running on Mule ESB stand alone](#runonmuleesbstandalone)
 	* [Running on CloudHub](#runoncloudhub)
 	* [Deploying your Anypoint Template on CloudHub](#deployingyouranypointtemplateoncloudhub)
-	* [Applying policies on CloudHub](#applyingpolicies)
 	* [Properties to be configured (With examples)](#propertiestobeconfigured)
 
 # License Agreement <a name="licenseagreement"/>
