@@ -1,0 +1,36 @@
+#%RAML 1.0
+title: Healthcare_CRM_Experience API
+version: v2
+baseUri: http://localhost:8081/api/
+
+types: 
+  messageResponse: 
+    type: object
+    properties: 
+      message: string
+
+/patient/migrateClinicalData:
+  displayName: migrateClinicalData
+  get:
+    description: migrate clinical data to Salesforce Health Cloud
+    responses:
+      200:
+        body:
+          application/json:
+            type: messageResponse
+            example: | 
+              {
+                "message": "The migration process has finished."
+              }
+/patient/{id}/migrateClinicalData:
+  get:
+    description: migrate clinical data to Salesforce Health Cloud
+    responses:
+      200:
+        body:
+          application/json:
+            type: messageResponse
+            example: | 
+              {
+                "message": "The migration process for a patient has finished."
+              }
