@@ -145,7 +145,7 @@ output application/json
                 <ee:set-variable variableName="id"><![CDATA[attributes.uriParams.id]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-		<flow-ref doc:name="migrateClinilDataForPatientFlow" doc:id="e0a7ecec-37de-41f3-a20f-053357ea80f6" name="migrateClinilDataForPatientFlow"/>
+		<flow-ref doc:name="migrateClinilDataForPatientFlow" doc:id="e0a7ecec-37de-41f3-a20f-053357ea80f6" name="migrateClinicalDataForPatientFlow"/>
     </flow>
     <flow name="get:\patient\migrateClinicalData:healthcare_sfhc_experience_api-config">
 		<flow-ref doc:name="migrateClinicalDataForAllPatientsFlow" doc:id="01a50f8d-2d1a-43ae-998c-3f47c8d0d4e2" name="migrateClinicalDataForAllPatientsFlow"/>

@@ -29,12 +29,12 @@ payload.entry map {
 output application/json
 ---
 {
-	"message": "The migrate process has finished."
+	"message": "The migration process has finished."
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</flow>
-	<flow name="migrateClinilDataForPatientFlow" doc:id="b343f656-88b9-4521-ba09-d27d8643646a" >
+	<flow name="migrateClinicalDataForPatientFlow" doc:id="b343f656-88b9-4521-ba09-d27d8643646a" >
 		<healthcare-ehrto-crmsync-process-api:create-migrate-clinical-datum-by-patient-id doc:name="Migrate Patient by Id from EHR" doc:id="9500a8e2-d0a8-460e-84ff-d3eafee0726c" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[vars.id]"/>
 		<ee:transform doc:name="Response message" doc:id="cc4098a2-3401-499e-a9a7-1d71e647201b" >
 			<ee:message >
@@ -42,7 +42,7 @@ output application/json
 output application/json
 ---
 {
-	"message": "The migrate process for a patient has finished."
+	"message": "The migration process for a patient has finished."
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
