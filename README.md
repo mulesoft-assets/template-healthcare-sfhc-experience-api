@@ -70,7 +70,7 @@ Once you have imported you Anypoint Template into Anypoint Studio you need to fo
 + Click on  `"Mule Application"`
 
 ### Running on Mule ESB stand alone <a name="runonmuleesbstandalone"/>
-Complete all properties in one of the property files, for example in [mule.prod.properties](../master/src/main/resources/mule.prod.properties) and run your app with the corresponding environment variable to use it. To follow the example, this will be `mule.env=prod`. 
+Complete all properties in one of the property files, for example in mule.prod.properties, and run your app with the corresponding environment variable to use it. To follow the example, this will be `mule.env=prod`. 
 
 ## Running on CloudHub <a name="runoncloudhub"/>
 While creating your application on CloudHub (or you can do it later as a next step), go to Runtime Manager > Manage Application > Properties to set the environment variables listed in "Properties to Configure" as well as the mule.env.
