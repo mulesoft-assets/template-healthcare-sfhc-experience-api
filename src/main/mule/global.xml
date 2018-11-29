@@ -9,6 +9,7 @@ http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api/current/mule-healthcare-ehrto-crmsync-process-api.xsd">
 	
+	<global-property doc:name="Global Property" doc:id="81a68da1-0094-4c35-a652-fad20a429426" name="mule.env" value="dev" />
     <http:listener-config name="healthcare_sfhc_experience_api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
@@ -20,7 +21,6 @@ http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api http://
 	<healthcare-ehrto-crmsync-process-api:config name="Healthcare_EHR_to_CRM_Sync_Process_API_Config" doc:name="Healthcare EHR to CRM Sync Process API Config" doc:id="3459b858-d859-41a7-9c20-80ce4c87a0eb" property_host="${ehr2crm.process.api.host}" property_port="${ehr2crm.process.api.port}" property_protocol="${ehr2crm.process.api.protocol}" property_basePath="${ehr2crm.process.api.basePath}" />
 	<configuration-properties doc:name="Configuration properties" doc:id="48bd8d4c-471f-4436-a341-aa772df93926" file="common.properties" />
 	<configuration-properties doc:name="Configuration properties" doc:id="84556c07-72bb-4b9d-82d9-72743e6d275f" file="mule.${mule.env}.properties" />
-	<global-property doc:name="Global Property" doc:id="33dbaa29-f9e4-43dc-94f9-72888b83ab27" name="mule.env" value="dev" />
 	
 	
 </mule>

@@ -20,7 +20,7 @@ payload.entry map {
 		</ee:transform>
 		<foreach doc:name="For Each Patient" doc:id="cdd373c9-51c2-40a2-9f8d-f259147dbc68" collection="#[payload]">
 			<logger level="INFO" doc:name="Call migrate for a particular patient" doc:id="383a57f0-7cf1-4154-a95d-07020d4b70a9" message="Calling post for #[payload.id]"/>
-			<healthcare-ehrto-crmsync-process-api:create-migrate-clinical-datum-by-patient-id doc:name="Migrate Patient clinical data" doc:id="bfd2d87c-3fec-427b-ae56-07afdf08db3f" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[payload.id]"/>
+			<healthcare-ehrto-crmsync-process-api:migrate-clinical-data doc:name="Migrate Patient clinical data" doc:id="9c01d784-2905-447f-b845-501620e102f7" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[payload.id]"/>
 		</foreach>
 		<logger level="INFO" doc:name="Log success" doc:id="e8627e99-72ef-49c9-a94c-78894fede52c" message="The migration of clinical data has finished. #[payload]"/>
 		<ee:transform doc:name="Response message" doc:id="b5a4c947-96f5-416e-89dc-6770bdf22301" >
@@ -35,7 +35,7 @@ output application/json
 		</ee:transform>
 	</flow>
 	<flow name="migrateClinicalDataForPatientFlow" doc:id="b343f656-88b9-4521-ba09-d27d8643646a" >
-		<healthcare-ehrto-crmsync-process-api:create-migrate-clinical-datum-by-patient-id doc:name="Migrate Patient by Id from EHR" doc:id="9500a8e2-d0a8-460e-84ff-d3eafee0726c" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[vars.id]"/>
+		<healthcare-ehrto-crmsync-process-api:migrate-clinical-data doc:name="Migrate Patient by Id from EHR" doc:id="9000c83e-78e9-43a8-ba14-99bc3a0a8022" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[vars.id]"/>
 		<ee:transform doc:name="Response message" doc:id="cc4098a2-3401-499e-a9a7-1d71e647201b" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0

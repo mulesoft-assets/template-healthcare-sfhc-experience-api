@@ -10,8 +10,8 @@ types:
       message: string
 
 /patient/migrateClinicalData:
-  displayName: migrateClinicalData
   get:
+    displayName: Migrate clinical data
     description: migrate clinical data to Salesforce Health Cloud
     responses:
       200:
@@ -24,6 +24,7 @@ types:
               }
 /patient/{id}/migrateClinicalData:
   get:
+    displayName: Migrate clinical data for patient
     description: migrate clinical data to Salesforce Health Cloud
     responses:
       200:
