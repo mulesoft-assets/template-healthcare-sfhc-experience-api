@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:healthcare-ehrto-crmsync-process-api="http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api"
-	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:healthcare-eh-rto-crm-sync-process-api="http://www.mulesoft.org/schema/mule/healthcare-eh-rto-crm-sync-process-api"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api/current/mule-healthcare-ehrto-crmsync-process-api.xsd">
+http://www.mulesoft.org/schema/mule/healthcare-eh-rto-crm-sync-process-api http://www.mulesoft.org/schema/mule/healthcare-eh-rto-crm-sync-process-api/current/mule-healthcare-eh-rto-crm-sync-process-api.xsd">
 	
 	<global-property doc:name="Global Property" doc:id="81a68da1-0094-4c35-a652-fad20a429426" name="mule.env" value="dev" />
     <http:listener-config name="healthcare_sfhc_experience_api-httpListenerConfig">
@@ -18,9 +17,9 @@ http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api http://
 	<http:request-config name="ehr-system-api" doc:name="HTTP Request configuration" doc:id="49cc6b8d-ce3b-44d8-a4fd-45f2b812be2f" basePath="${ehr2fhir.system.api.basePath}">
 		<http:request-connection host="${ehr2fhir.system.api.host}" port="${ehr2fhir.system.api.port}" />
 	</http:request-config>
-	<healthcare-ehrto-crmsync-process-api:config name="Healthcare_EHR_to_CRM_Sync_Process_API_Config" doc:name="Healthcare EHR to CRM Sync Process API Config" doc:id="3459b858-d859-41a7-9c20-80ce4c87a0eb" property_host="${ehr2crm.process.api.host}" property_port="${ehr2crm.process.api.port}" property_protocol="${ehr2crm.process.api.protocol}" property_basePath="${ehr2crm.process.api.basePath}" />
 	<configuration-properties doc:name="Configuration properties" doc:id="48bd8d4c-471f-4436-a341-aa772df93926" file="common.properties" />
 	<configuration-properties doc:name="Configuration properties" doc:id="84556c07-72bb-4b9d-82d9-72743e6d275f" file="mule.${mule.env}.properties" />
+	<healthcare-eh-rto-crm-sync-process-api:config name="Healthcare_EHR_to_CRM_Sync_Process_API_Config" doc:name="Healthcare EHR to CRM Sync Process API Config" doc:id="3033aa7a-24bf-4293-a718-589535842128" property_host="${ehr2crm.process.api.host}" property_port="${ehr2crm.process.api.port}" property_protocol="${ehr2crm.process.api.protocol}" property_basePath="${ehr2crm.process.api.basePath}" />
 	
 	
 </mule>
