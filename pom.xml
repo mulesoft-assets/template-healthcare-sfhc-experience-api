@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<parent>
 		<groupId>org.mule.templates</groupId>
@@ -14,10 +13,6 @@
 	<packaging>mule-application</packaging>
 	<name>template-healthcare-sfhc-experience-api</name>
 
-	<properties>
-		<healthcare.ehr2crm.sync.process.api>2.0.0</healthcare.ehr2crm.sync.process.api>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.mule.modules</groupId>
@@ -26,17 +21,17 @@
 		</dependency>
 
 		<dependency>
-			<groupId>a06c5779-bccc-4b0e-b90b-96933206e3c1</groupId>
-			<artifactId>mule-plugin-healthcare_ehr2crm_sync_process_api</artifactId>
-			<version>${healthcare.ehr2crm.sync.process.api}</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-http-connector</artifactId>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-	</dependencies>
+		<dependency>
+            <groupId>org.mule.examples</groupId>
+            <artifactId>mule-plugin-catalyst-healthcare-ehr-to-crm-papi</artifactId>
+            <version>2.0.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    </dependencies>
 
 	<repositories>
 		<repository>

@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns:healthcare-ehrto-crmsync-process-api="http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api http://www.mulesoft.org/schema/mule/healthcare-ehrto-crmsync-process-api/current/mule-healthcare-ehrto-crmsync-process-api.xsd
+<mule
+	xmlns:healthcare-eh-rto-crm-sync-process-api="http://www.mulesoft.org/schema/mule/healthcare-eh-rto-crm-sync-process-api"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<flow name="migrateClinicalDataForAllPatientsFlow" doc:id="3f936cf4-89ec-4b33-926a-514229056ad0" >
-		<http:request method="GET" doc:name="Fetch Patients from EHR" doc:id="5f81c736-1f58-4ca2-b06d-3e0760c5cfa7" config-ref="ehr-system-api" path="/Patient"/>
-		<ee:transform doc:name="Extract patient ids" doc:id="6525e752-eb9b-45d2-9230-38d787d72dd9" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/healthcare-eh-rto-crm-sync-process-api http://www.mulesoft.org/schema/mule/healthcare-eh-rto-crm-sync-process-api/current/mule-healthcare-eh-rto-crm-sync-process-api.xsd">
+	<flow name="migrateClinicalDataForAllPatientsFlow" doc:id="3f936cf4-89ec-4b33-926a-514229056ad0">
+		<http:request method="GET" doc:name="Fetch Patients from EHR"
+			doc:id="5f81c736-1f58-4ca2-b06d-3e0760c5cfa7" config-ref="ehr-system-api"
+			path="/Patient" />
+		<ee:transform doc:name="Extract patient ids"
+			doc:id="6525e752-eb9b-45d2-9230-38d787d72dd9">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 payload.entry map {
@@ -18,14 +24,18 @@ payload.entry map {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<foreach doc:name="For Each Patient" doc:id="cdd373c9-51c2-40a2-9f8d-f259147dbc68" collection="#[payload]">
-			<logger level="INFO" doc:name="Call migrate for a particular patient" doc:id="383a57f0-7cf1-4154-a95d-07020d4b70a9" message="Calling post for #[payload.id]"/>
-			<healthcare-ehrto-crmsync-process-api:migrate-clinical-data doc:name="Migrate Patient clinical data" doc:id="9c01d784-2905-447f-b845-501620e102f7" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[payload.id]"/>
+		<foreach doc:name="For Each Patient" doc:id="cdd373c9-51c2-40a2-9f8d-f259147dbc68"
+			collection="#[payload]">
+			<logger level="INFO" doc:name="Call migrate for a particular patient"
+				doc:id="383a57f0-7cf1-4154-a95d-07020d4b70a9" message="Calling post for #[payload.id]" />
+			<healthcare-eh-rto-crm-sync-process-api:migrate-clinical-data doc:name="Migrate Patient clinical data" doc:id="030e3c84-7b11-4f0d-8fb8-8b092a0eb681" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[payload.id]"/>
 		</foreach>
-		<logger level="INFO" doc:name="Log success" doc:id="e8627e99-72ef-49c9-a94c-78894fede52c" message="The migration of clinical data has finished. #[payload]"/>
-		<ee:transform doc:name="Response message" doc:id="b5a4c947-96f5-416e-89dc-6770bdf22301" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<logger level="INFO" doc:name="Log success"
+			doc:id="e8627e99-72ef-49c9-a94c-78894fede52c" message="The migration of clinical data has finished. #[payload]" />
+		<ee:transform doc:name="Response message"
+			doc:id="b5a4c947-96f5-416e-89dc-6770bdf22301">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -34,11 +44,12 @@ output application/json
 			</ee:message>
 		</ee:transform>
 	</flow>
-	<flow name="migrateClinicalDataForPatientFlow" doc:id="b343f656-88b9-4521-ba09-d27d8643646a" >
-		<healthcare-ehrto-crmsync-process-api:migrate-clinical-data doc:name="Migrate Patient by Id from EHR" doc:id="9000c83e-78e9-43a8-ba14-99bc3a0a8022" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[vars.id]"/>
-		<ee:transform doc:name="Response message" doc:id="cc4098a2-3401-499e-a9a7-1d71e647201b" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+	<flow name="migrateClinicalDataForPatientFlow" doc:id="b343f656-88b9-4521-ba09-d27d8643646a">
+		<healthcare-eh-rto-crm-sync-process-api:migrate-clinical-data doc:name="Migrate Patient by Id from EHR" doc:id="7e5d8e45-99e5-459c-8edd-0c46e94bd5fe" config-ref="Healthcare_EHR_to_CRM_Sync_Process_API_Config" patient-id="#[vars.id]"/>
+		<ee:transform doc:name="Response message"
+			doc:id="cc4098a2-3401-499e-a9a7-1d71e647201b">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
