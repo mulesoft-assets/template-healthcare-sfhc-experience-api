@@ -1,23 +1,10 @@
 # Template Healthcare SFHC HealthCloud Experience API
 
-+ [License Agreement](#licenseagreement)
-+ [Use Case](#usecase)
-+ [Considerations](#considerations)
-	* [Cloudhub security considerations](#cloudhubsecurityconsiderations)
-	* [APIs security considerations](#apissecurityconsiderations)
-+ [Run it!](#runit)
-	* [Running on premise](#runonopremise)
-	* [Running on Studio](#runonstudio)
-	* [Running on Mule ESB stand alone](#runonmuleesbstandalone)
-	* [Running on CloudHub](#runoncloudhub)
-	* [Deploying your Anypoint Template on CloudHub](#deployingyouranypointtemplateoncloudhub)
-	* [Properties to be configured (With examples)](#propertiestobeconfigured)
+# License Agreement
 
-# License Agreement <a name="licenseagreement"/>
-Note that using this template is subject to the conditions of this [License Agreement](AnypointTemplateLicense.pdf).
-Please review the terms of the license before downloading and using this template. In short, you are allowed to use the template for free with Mule ESB Enterprise Edition, CloudHub, or as a trial in Anypoint Studio.
+This template is subject to the conditions of the [MuleSoft License Agreement](https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf). Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio. 
 
-# Use Case <a name="usecase"/>
+# Use Case
 
 As a Salesforce Health Cloud user I want a service to request Clinical data from an EHR system to be updated in my Salesforce instance.
 
@@ -25,74 +12,79 @@ This template should serve as a foundation for implementing an API that connects
 
 SFHC Experience API is part of the Healthcare Templates Solution and it is interconnected with EHR FHIR System API(used for retrieving EHR data) and EHR to CRM Sync Process API(used for migrating Clinical data in SFHC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud.
 
-# Considerations <a name="considerations"/>
+# Considerations
 
-To make this Anypoint Template run, there are certain preconditions that must be considered. **Failing to do so could lead to unexpected behavior of the template.**
+To make this Anypoint Template run, there are certain preconditions that must be considered. Failing to do so could lead to unexpected behavior of the template.
 
-## APIs security considerations <a name="apissecurityconsiderations"/>
-This Experience API is meant to be deployed to CloudHub and managed using the API Platform Manager.
+## API Security Considerations
+This Experience API is meant to be deployed to CloudHub and managed using the API Manager.
 
-### Exposing external endpoints with HTTP
-+ It is triggered by SFHC Health Cloud using HTTP
+### Expose External Endpoints with HTTP
+- Trigger using SFHC Health Cloud over HTTP
 
-### Exposing internal endpoints with RAML and HTTP
-+ It is interconnected internally with EHR to CRM Sync Process API and EHR FHIR System API, which are deployed within a CloudHub.
+### Expose Internal Endpoints with RAML and HTTP
+- Interconnect internally with EHR to CRM Sync Process API and EHR FHIR System API, which are deployed within  CloudHub.
 
-# Run it! <a name="runit"/>
+# Run it!
 Simple steps to get Healthcare SFHC Experience API running.
-See below.
 
-## Running on premise <a name="runonopremise"/>
+## Running On Premises
 In this section we detail the way you should run your Anypoint Template on your computer.
 
 
-### Where to Download Mule Studio and Mule ESB
-First thing to know if you are a newcomer to Mule is where to get the tools.
+### Where to Download Anypoint Studio and the Mule Runtime
 
-+ You can download Mule Studio from this [Location](http://www.mulesoft.com/platform/mule-studio)
-+ You can download Mule ESB from this [Location](http://www.mulesoft.com/platform/soa/mule-esb-open-source-esb)
+If you are new to Mule, download this software:
 
-### Importing an Anypoint Template into Studio
-Anypoint Studio offers several ways to import a project into the workspace, for instance: 
+- [Download Anypoint Studio](https://www.mulesoft.com/platform/studio)
+- [Download Mule runtime](https://www.mulesoft.com/lp/dl/mule-esb-enterprise)
 
-+ Anypoint Studio Project from File System
-+ Packaged mule application (.jar)
+### Import Template in Studio
 
-You can find a detailed description on how to do so in this [Documentation Page](https://docs.mulesoft.com/studio/7.2/import-export-packages).
+In Studio, click the Exchange X icon in the upper left of the taskbar, log in with your
+Anypoint Platform credentials, search for the template, and click **Open**.
 
-### Running on Studio <a name="runonstudio"/>
-Once you have imported you Anypoint Template into Anypoint Studio you need to follow these steps to run it:
+### Run in Studio
 
-+ Locate the properties file `mule-<env>.properties`, in src/main/app/resources
-+ Complete all the properties required as per the examples in the section [Properties to be configured](#propertiestobeconfigured)
-+ Once that is done, right click on you Anypoint Template project folder 
-+ Hover you mouse over `"Run as"`
-+ Click on  `"Mule Application"`
+After opening your template in Anypoint Studio, follow these steps to run it:
 
-### Running on Mule ESB stand alone <a name="runonmuleesbstandalone"/>
-Complete all properties in one of the property files, for example in mule.prod.properties, and run your app with the corresponding environment variable to use it. To follow the example, this will be `mule.env=prod`. 
+1. Locate the properties file `mule.dev.properties`, in src/main/resources.
+2. Complete all the properties in the "Properties to Configure" section.
+3. Right click the template project folder.
+4. Hover your mouse over `Run as`.
+5. Click `Mule Application (configure)`.
+6. Inside the dialog, select Environment and set the variable `mule.env` to the value `dev`.
+7. Click `Run`.
 
-## Running on CloudHub <a name="runoncloudhub"/>
-While creating your application on CloudHub (or you can do it later as a next step), go to Runtime Manager > Manage Application > Properties to set the environment variables listed in "Properties to Configure" as well as the mule.env.
-Follow other steps defined [here](#runonpremise) and once your app is all set and started, there is no need to do anything else.
+### Run with Mule Stand Alone
 
-### Deploying your Anypoint Template on CloudHub <a name="deployingyouranypointtemplateoncloudhub"/>
-Mule Studio provides you with really easy way to deploy your Template directly to CloudHub, for the specific steps to do so please check this [link](https://docs.mulesoft.com/runtime-manager/deploying-to-cloudhub)
+Complete all properties in one of the property files, for example in `mule.prod.properties` and run your app with the corresponding environment variable to use it. To follow the example, use `mule.env=prod`.
 
-## Properties to be configured (With examples) <a name="propertiestobeconfigured"/>
-In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. Detailed list with examples:
-### Application properties
+## Run in CloudHub
+After adding your application to Runtime Manager, go to **Manage Application** > **Properties** to set the environment variables listed in the "Properties to Configure" section.
 
-####HTTP configuration
-+ http.port `8081`
+### Deploy in CloudHub
 
-####EHR2FHIR System API configuration
-+ ehr2fhir.system.api.host `api_ehr_hostname`
-+ ehr2fhir.system.api.port `8081` 
-+ ehr2fhir.system.api.basePath `/api`
+In Studio, right click your project name in Package Explorer and select **Anypoint Platform** > **Deploy on CloudHub**.
 
-####EHR2CRM Process API configuration
-+ ehr2crm.process.api.host `api_ehr2crm_hostname`
-+ ehr2crm.process.api.port `8081` 
-+ ehr2crm.process.api.basePath `/api`
-+ ehr2crm.process.api.protocol `HTTP`
+## Properties to Configure
+To use this template, you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. 
+
+### Application Properties
+
+#### HTTP Configuration
+
+- http.port `8081`
+
+#### EHR2FHIR System API Configuration
+
+- ehr2fhir.system.api.host `api_ehr_hostname`
+- ehr2fhir.system.api.port `8081` 
+- ehr2fhir.system.api.basePath `/api`
+
+#### EHR2CRM Process API configuration
+
+- ehr2crm.process.api.host `api_ehr2crm_hostname`
+- ehr2crm.process.api.port `8081` 
+- ehr2crm.process.api.basePath `/api`
+- ehr2crm.process.api.protocol `HTTP`
